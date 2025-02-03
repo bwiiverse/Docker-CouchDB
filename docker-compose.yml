@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - couchdb
+    environment:
+      - COUCHDB_URL=http://admin:admin@couchdb:5984
+    volumes:
+      - .:/usr/src/app
+    command: ["node", "server.js"]
+
+  couchdb:
+    image: couchdb:3.2.2
+    restart: always
+    ports:
+      - "5984:5984"
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin
+    volumes:
+      - couchdb_data:/opt/couchdb/data
+
+volumes:
+  couchdb_data:
